@@ -10,7 +10,7 @@ function App() {
       minSize={windowSize}
       maxSize={windowSize}
       windowTitle="It Worked!"
-      style="background-color: #F3F3F3; text-align: center;"
+      style="background-color: #FAFAFA; text-align: center;"
     >
       <View />
     </Window>

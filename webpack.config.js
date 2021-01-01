@@ -33,6 +33,14 @@ module.exports = (_, argv) => {
             name: '[name]-[hash].[ext]',
           },
         },
+        {
+          test: /\.(ttf)$/i,
+          loader: 'file-loader',
+          options: {
+            name: '[hash].[ext]',
+            publicPath: 'dist',
+          },
+        },
       ],
     },
     devtool: isProd ? false : 'source-map',
