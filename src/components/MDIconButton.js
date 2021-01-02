@@ -11,7 +11,7 @@ function MDIconButton({ icon, id, ...props }) {
 
   return (
     // Wierd bug!!! icons doesn't work if [id] is destructed as prop on Button component;
-    // BAD FIX: i had to place the [id] in a wrapper View component
+    // FUTURE FIX: currently i have to place the [id] in a wrapper View component
     <View id={id}>
       <Button style={style} {...props}>
         {codeValue}

@@ -13,7 +13,7 @@ function CryptoIconLabel({ icon, id, ...props }) {
 
   return (
     // Wierd bug!!! icons doesn't work if [id] is destructed as prop on Text component;
-    // BAD FIX: i had to place the [id] in a wrapper View component
+    // FUTURE FIX: currently i have to place the [id] in a wrapper View component
     <View id={id}>
       <Text style={style} {...props}>
         {codeValue}

@@ -1,23 +1,34 @@
-import React from 'react'
-import { View, Text, Button, LineEdit } from '@nodegui/react-nodegui'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, LineEdit } from '@nodegui/react-nodegui'
 import { colorHover, colorPressed } from '../../utils'
 import MDIconButton from '../../components/MDIconButton'
-import CryptoIconLabel from '../../components/CryptoIconLabel'
+import CurrencyList, { getCurrencySymbol } from './CurrencyList'
+import AssetItem from './AssetItem'
 
 function PriceView() {
+  const viewRef = useRef(null)
+  const [priceCurrency, setPriceCurrency] = useState('ngn')
+  const currencySymbol = getCurrencySymbol(priceCurrency)
+
+  // FUTURE FIX: currently this solve issue of widgets getting out of place (not updating) during re-render
+  useEffect(() => {
+    if (viewRef.current !== null) {
+      viewRef.current.layout.update()
+    }
+  })
+
   return (
-    <View id="price-view" styleSheet={styleSheet}>
+    <View ref={viewRef} id="price-view" styleSheet={styleSheet}>
       <View id="header">
         <View id="header-left">
           <Text>Currency:</Text>
-          <View id="currency-list">
-            <Button style="color: #00D1D1; font-weight: bold;" flat={true}>
-              USD
-            </Button>
-            <Button flat={true}>EUR</Button>
-            <Button flat={true}>JPY</Button>
-            <Button flat={true}>NGN</Button>
-          </View>
+
+          <CurrencyList
+            selectedCurrency={priceCurrency}
+            onCurrencySelected={(selectedCurrency) => {
+              setPriceCurrency(selectedCurrency)
+            }}
+          />
         </View>
         <View id="header-right">
           <Text id="connection-status">In Sync</Text>
@@ -27,33 +38,20 @@ function PriceView() {
       <LineEdit placeholderText="TYPE NEW ASSET TO ADD..."></LineEdit>
       {false && <Text id="status-text">Loading...</Text>}
       <View id="assets">
-        <View id="btc">
-          <View id="asset-left">
-            <MDIconButton icon="delete" id="action-btn" />
-            <CryptoIconLabel icon="btc" id="asset-icon" />
-            <View>
-              <Text id="asset-name-full">Bitcoin</Text>
-              <Text id="asset-name-short">BTC</Text>
-            </View>
-          </View>
-          <View id="asset-right">
-            <View id="asset-price">
-              <Text id="price-change">-1.4%</Text>
-              <Text id="price-currency">$</Text>
-              <Text id="price-value">20,0000</Text>
-            </View>
-            <View id="asset-market">
-              <View>
-                <Text id="market-data">Market Cap:</Text>
-                <Text id="market-value">$440,353,650573</Text>
-              </View>
-              <View>
-                <Text id="market-data">24HR HIGH/LOW:</Text>
-                <Text id="market-value">$22,852.83 / $23,739.85</Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        <AssetItem
+          asset={{
+            name: 'Bitcoin',
+            symbol: 'btc',
+            price: '20,0000',
+            change: '-1.4',
+            market: {
+              marketCap: '440,353,650573',
+              marketHigh: '22,852.83',
+              marketLow: '23,739.85',
+            },
+          }}
+          currencySymbol={currencySymbol}
+        />
       </View>
       <View id="footer">
         <Text>POWERED BY: coingecko.com</Text>
@@ -75,7 +73,7 @@ const styleSheet = `
         justify-content: "space-between";
     }
 
-    #header-left, #header-right, #currency-list {
+    #header-left, #header-right {
         display: flex;
         flex-direction: row;
     }
@@ -88,15 +86,6 @@ const styleSheet = `
         margin-left: 15px;
         margin-right: 7px;
         color: #666666;
-    }
-
-    #currency-list QPushButton {
-        color: #CCCCCC;
-        border: 0px;
-        font-size: 20px;
-        font-family: Roboto;
-        margin-right: 5px;
-        text-transform: uppercase;
     }
 
     #connection-status {
@@ -160,119 +149,7 @@ const styleSheet = `
         padding-left: 20px;
     }
 
-    #btc {
-        display: flex;
-        flex-direction: row;
-        justify-content: "space-between";
-        align-items: "center";
-        padding: 20px;
-        padding-bottom: 30px;
-        padding-top: 30px;
-        border-bottom: 2px solid #DEDEDE;
-    }
-
-    #asset-left {
-        display: flex;
-        flex-direction: row;
-        align-items: "center";
-        justify-content: "space-between";
-        width: 320px;
-    }
-
-    #action-btn QPushButton {
-        border: 2px solid #666666;
-        border-radius: 20px;
-        width: 40px;
-        height: 40px;
-        font-size: 28px;
-        color: #F2F2F2;
-    }
-
-    #action-btn QPushButton:hover {
-      background-color: ${colorHover('#F2F2F2')};
-      color: #666666;
-    }
-
-    #action-btn QPushButton:pressed {
-      background-color: ${colorPressed('#F2F2F2')};
-      color: #666666;
-    }
-
-    #asset-icon QLabel {
-        font-size: 90px;
-        height: 110px;
-        width: 110px;
-        color: #00CCCC;
-        border-color: #00CCCC;
-        border-radius: 55px;
-        border: 1px solid #00CCCC;
-    }
-
-    #asset-name-full {
-        font-size: 35px;
-        font-weight: 500;
-        font-family: Roboto;
-        text-transform: uppercase;
-        color: #000000;
-    }
-
-    #asset-name-short {
-        font-size: 25px;
-        font-family: Roboto;
-        text-transform: uppercase;
-        color: #007070;
-        margin-left: 2px;
-    }
-
-    #asset-price {
-      display: flex;
-      flex-direction: row;
-      align-items: "center";
-    }
-
-    #price-value {
-      color: #000000;
-      font-family: Roboto;
-      font-weight: 500;
-      font-size: 44px;
-    }
-
-    #price-currency {
-      color: #000000;
-      font-size: 30px;
-      margin-left: 1px;
-      margin-right: 1px;
-    }
-
-    #price-change {
-      color: #990000;
-      font-size: 18px;
-      font-family: Roboto;
-    }
-
-    #asset-market {
-      margin-top: 4px;
-    }
-
-    #asset-market > QWidget {
-      display: flex;
-      flex-direction: row;
-    }
-
-    #market-data, #market-value {
-      font-family: Roboto;
-      font-size: 13px;
-      text-transform: uppercase;
-    }
-
-    #market-data {
-      color: #00A8A8;
-      margin-right: 1px;
-    }
-
-    #market-value {
-      color: #1F1F1F;
-    }
+    
 
 `
 

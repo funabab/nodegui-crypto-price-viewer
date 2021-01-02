@@ -8,7 +8,6 @@ function App() {
   return (
     <Window
       minSize={windowSize}
-      maxSize={windowSize}
       windowTitle="It Worked!"
       style="background-color: #FAFAFA; text-align: center;"
     >

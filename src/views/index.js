@@ -9,8 +9,8 @@ function View() {
   //   `
   // return <Text style={style}>It Worked!</Text>
 
-  // return <PriceView />
-  return <ConnectionErrorView />
+  return <PriceView />
+  // return <ConnectionErrorView />
 }
 
 export default View
