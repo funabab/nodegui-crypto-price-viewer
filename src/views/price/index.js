@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, Button, LineEdit } from '@nodegui/react-nodegui'
 import { colorHover, colorPressed } from '../../utils'
+import MDIconButton from '../../components/MDIconButton'
 
 function PriceView() {
   return (
@@ -19,7 +20,9 @@ function PriceView() {
         </View>
         <View id="header-right">
           <Text id="connection-status">In Sync</Text>
-          <Button flat={true}>T</Button>
+          <MDIconButton icon="brightness-2" flat={true}>
+            T
+          </MDIconButton>
         </View>
       </View>
       <LineEdit placeholderText="TYPE NEW ASSET TO ADD..."></LineEdit>
