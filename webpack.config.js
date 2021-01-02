@@ -34,7 +34,7 @@ module.exports = (_, argv) => {
           },
         },
         {
-          test: /\.(ttf)$/i,
+          test: /\.(ttf|png)$/i,
           loader: 'file-loader',
           options: {
             name: '[hash].[ext]',
