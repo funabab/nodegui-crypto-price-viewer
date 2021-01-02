@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, Button, LineEdit } from '@nodegui/react-nodegui'
 import { colorHover, colorPressed } from '../../utils'
 import MDIconButton from '../../components/MDIconButton'
+import CryptoIconLabel from '../../components/CryptoIconLabel'
 
 function PriceView() {
   return (
@@ -20,9 +21,7 @@ function PriceView() {
         </View>
         <View id="header-right">
           <Text id="connection-status">In Sync</Text>
-          <MDIconButton icon="brightness-2" flat={true}>
-            T
-          </MDIconButton>
+          <MDIconButton icon="brightness-2" flat={true} />
         </View>
       </View>
       <LineEdit placeholderText="TYPE NEW ASSET TO ADD..."></LineEdit>
@@ -30,8 +29,8 @@ function PriceView() {
       <View id="assets">
         <View id="btc">
           <View id="asset-left">
-            <Button id="action-btn">T</Button>
-            <Button id="asset-icon">B</Button>
+            <MDIconButton icon="delete" id="action-btn" />
+            <CryptoIconLabel icon="btc" id="asset-icon" />
             <View>
               <Text id="asset-name-full">Bitcoin</Text>
               <Text id="asset-name-short">BTC</Text>
@@ -94,7 +93,7 @@ const styleSheet = `
     }
     
 
-    #header-right > QPushButton {
+    #header-right QPushButton {
         width: 58px;
         height: 58px;
         background-color: #E5E5E5;
@@ -104,11 +103,11 @@ const styleSheet = `
         border-radius: 0px;
     }
 
-    #header-right > QPushButton:hover {
+    #header-right QPushButton:hover {
         background-color: ${colorHover('#E5E5E5')};
     }
 
-    #header-right > QPushButton:pressed {
+    #header-right QPushButton:pressed {
         background-color: ${colorPressed('#E5E5E5')};
     }
 
@@ -151,6 +150,9 @@ const styleSheet = `
         flex-direction: row;
         justify-content: "space-between";
         align-items: "center";
+        padding: 20px;
+        padding-bottom: 40px;
+        border-bottom: 2px solid #C0C0C0;
     }
 
     #asset-left {
@@ -161,15 +163,24 @@ const styleSheet = `
         width: 320px;
     }
 
-    #action-btn {
+    #action-btn QPushButton {
         border: 2px solid #666666;
         border-radius: 20px;
         width: 40px;
         height: 40px;
+        font-size: 28px;
         color: #666666;
     }
 
-    #asset-icon {
+    #action-btn QPushButton:hover {
+      background-color: ${colorHover('#F2F2F2')}
+    }
+
+    #action-btn QPushButton:pressed {
+      background-color: ${colorPressed('#F2F2F2')}
+    }
+
+    #asset-icon QLabel {
         font-size: 90px;
         height: 110px;
         width: 110px;

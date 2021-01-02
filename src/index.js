@@ -9,6 +9,7 @@ import FontRobotoBold from '../assets/fonts/Roboto/Roboto-Bold.ttf'
 import FontRobotoItalic from '../assets/fonts/Roboto/Roboto-Italic.ttf'
 
 import FontMDIcons from '../assets/fonts/Material-Design-Iconic-Font.ttf'
+import FontCryptoFont from '../assets/fonts/cryptofont.ttf'
 
 const fonts = [
   FontRobotoRegular,
@@ -16,6 +17,7 @@ const fonts = [
   FontRobotoBold,
   FontRobotoItalic,
   FontMDIcons,
+  FontCryptoFont,
 ]
 
 fonts.forEach((font) => QFontDatabase.addApplicationFont(font))
