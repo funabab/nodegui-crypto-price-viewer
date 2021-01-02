@@ -12,7 +12,7 @@ function CryptoIconLabel({ icon, id, ...props }) {
     icon && icon in CryptoIconCodes ? CryptoIconCodes[icon] : '?'
 
   return (
-    // Wierd bug!!! icons doesn't work if [id] is destructed as prop on Button component;
+    // Wierd bug!!! icons doesn't work if [id] is destructed as prop on Text component;
     // BAD FIX: i had to place the [id] in a wrapper View component
     <View id={id}>
       <Text style={style} {...props}>

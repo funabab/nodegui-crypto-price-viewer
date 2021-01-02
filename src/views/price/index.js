@@ -11,7 +11,7 @@ function PriceView() {
         <View id="header-left">
           <Text>Currency:</Text>
           <View id="currency-list">
-            <Button style="color: #00D1D1" flat={true}>
+            <Button style="color: #00D1D1; font-weight: bold;" flat={true}>
               USD
             </Button>
             <Button flat={true}>EUR</Button>
@@ -25,7 +25,7 @@ function PriceView() {
         </View>
       </View>
       <LineEdit placeholderText="TYPE NEW ASSET TO ADD..."></LineEdit>
-      <Text id="status-text">Loading...</Text>
+      {false && <Text id="status-text">Loading...</Text>}
       <View id="assets">
         <View id="btc">
           <View id="asset-left">
@@ -36,7 +36,23 @@ function PriceView() {
               <Text id="asset-name-short">BTC</Text>
             </View>
           </View>
-          <View id="asset-right"></View>
+          <View id="asset-right">
+            <View id="asset-price">
+              <Text id="price-change">-1.4%</Text>
+              <Text id="price-currency">$</Text>
+              <Text id="price-value">20,0000</Text>
+            </View>
+            <View id="asset-market">
+              <View>
+                <Text id="market-data">Market Cap:</Text>
+                <Text id="market-value">$440,353,650573</Text>
+              </View>
+              <View>
+                <Text id="market-data">24HR HIGH/LOW:</Text>
+                <Text id="market-value">$22,852.83 / $23,739.85</Text>
+              </View>
+            </View>
+          </View>
         </View>
       </View>
       <View id="footer">
@@ -66,7 +82,7 @@ const styleSheet = `
 
     #header-left > QLabel {
         font-family: Roboto;
-        font-size: 20px;
+        font-size: 15px;
         font-weight: bold;
         text-transform: uppercase;
         margin-left: 15px;
@@ -77,7 +93,7 @@ const styleSheet = `
     #currency-list QPushButton {
         color: #CCCCCC;
         border: 0px;
-        font-size: 25px;
+        font-size: 20px;
         font-family: Roboto;
         margin-right: 5px;
         text-transform: uppercase;
@@ -86,7 +102,7 @@ const styleSheet = `
     #connection-status {
         color: #1A661D;
         font-family: Roboto;
-        font-size: 13px;
+        font-size: 10px;
         font-style: italic;   
         text-transform: uppercase;
         margin-right: 5px;
@@ -94,10 +110,10 @@ const styleSheet = `
     
 
     #header-right QPushButton {
-        width: 58px;
-        height: 58px;
+        width: 42px;
+        height: 42px;
         background-color: #E5E5E5;
-        font-size: 24px;
+        font-size: 18px;
         color: #000000;
         border: 0px;
         border-radius: 0px;
@@ -115,10 +131,9 @@ const styleSheet = `
         background-color: #D4D4D4;
         border: 0px;
         border-radius: 0px;
-        font-size: 18px;
-        height: 50px;
+        font-size: 25px;
+        height: 55px;
         padding-left: 50px;
-        font-style: italic;
         text-transform: uppercase;
     }
 
@@ -151,8 +166,9 @@ const styleSheet = `
         justify-content: "space-between";
         align-items: "center";
         padding: 20px;
-        padding-bottom: 40px;
-        border-bottom: 2px solid #C0C0C0;
+        padding-bottom: 30px;
+        padding-top: 30px;
+        border-bottom: 2px solid #DEDEDE;
     }
 
     #asset-left {
@@ -169,15 +185,17 @@ const styleSheet = `
         width: 40px;
         height: 40px;
         font-size: 28px;
-        color: #666666;
+        color: #F2F2F2;
     }
 
     #action-btn QPushButton:hover {
-      background-color: ${colorHover('#F2F2F2')}
+      background-color: ${colorHover('#F2F2F2')};
+      color: #666666;
     }
 
     #action-btn QPushButton:pressed {
-      background-color: ${colorPressed('#F2F2F2')}
+      background-color: ${colorPressed('#F2F2F2')};
+      color: #666666;
     }
 
     #asset-icon QLabel {
@@ -204,6 +222,56 @@ const styleSheet = `
         text-transform: uppercase;
         color: #007070;
         margin-left: 2px;
+    }
+
+    #asset-price {
+      display: flex;
+      flex-direction: row;
+      align-items: "center";
+    }
+
+    #price-value {
+      color: #000000;
+      font-family: Roboto;
+      font-weight: 500;
+      font-size: 44px;
+    }
+
+    #price-currency {
+      color: #000000;
+      font-size: 30px;
+      margin-left: 1px;
+      margin-right: 1px;
+    }
+
+    #price-change {
+      color: #990000;
+      font-size: 18px;
+      font-family: Roboto;
+    }
+
+    #asset-market {
+      margin-top: 4px;
+    }
+
+    #asset-market > QWidget {
+      display: flex;
+      flex-direction: row;
+    }
+
+    #market-data, #market-value {
+      font-family: Roboto;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    #market-data {
+      color: #00A8A8;
+      margin-right: 1px;
+    }
+
+    #market-value {
+      color: #1F1F1F;
     }
 
 `
