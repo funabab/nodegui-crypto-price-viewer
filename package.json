@@ -1,5 +1,6 @@
 {
   "name": "nodegui-crypto-price-viewer",
+  "displayName": "NodeGUI Crypto Price Viewer",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Abdulbassit Abdullahi Funsho",

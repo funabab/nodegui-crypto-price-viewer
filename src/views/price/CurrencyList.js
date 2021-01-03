@@ -26,12 +26,6 @@ function CurrencyList({ selectedCurrency, onCurrencySelected }) {
           {currency}
         </Button>
       ))}
-      {/* <Button style="color: #00D1D1; font-weight: bold;" flat={true}>
-        USD
-      </Button>
-      <Button flat={true}>EUR</Button>
-      <Button flat={true}>JPY</Button>
-      <Button flat={true}>NGN</Button> */}
     </View>
   )
 }

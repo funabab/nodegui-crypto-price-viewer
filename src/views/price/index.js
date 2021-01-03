@@ -3,7 +3,8 @@ import { View, Text, LineEdit } from '@nodegui/react-nodegui'
 import { colorHover, colorPressed } from '../../utils'
 import MDIconButton from '../../components/MDIconButton'
 import CurrencyList, { getCurrencySymbol } from './CurrencyList'
-import AssetItem from './AssetItem'
+import AssetList from './AssetList'
+import StatusText from './StatusText'
 
 function PriceView() {
   const viewRef = useRef(null)
@@ -36,23 +37,25 @@ function PriceView() {
         </View>
       </View>
       <LineEdit placeholderText="TYPE NEW ASSET TO ADD..."></LineEdit>
-      {false && <Text id="status-text">Loading...</Text>}
-      <View id="assets">
-        <AssetItem
-          asset={{
-            name: 'Bitcoin',
-            symbol: 'btc',
-            price: '20,0000',
-            change: '-1.4',
-            market: {
-              marketCap: '440,353,650573',
-              marketHigh: '22,852.83',
-              marketLow: '23,739.85',
-            },
-          }}
-          currencySymbol={currencySymbol}
-        />
-      </View>
+      <StatusText />
+      <AssetList
+        assets={
+          [
+            // {
+            //   name: 'Bitcoin',
+            //   symbol: 'btc',
+            //   price: '20,0000',
+            //   change: '-1.4',
+            //   market: {
+            //     marketCap: '440,353,650573',
+            //     marketHigh: '22,852.83',
+            //     marketLow: '23,739.85',
+            //   },
+            // },
+          ]
+        }
+        currencySymbol={currencySymbol}
+      />
       <View id="footer">
         <Text>POWERED BY: coingecko.com</Text>
       </View>
@@ -63,6 +66,7 @@ function PriceView() {
 const styleSheet = `
     #price-view {
         display: flex;
+        flex-direction: column;
     }
 
     #header {
@@ -124,20 +128,7 @@ const styleSheet = `
         height: 55px;
         padding-left: 50px;
         text-transform: uppercase;
-    }
-
-    #status-text {
-        qproperty-alignment: AlignCenter;
-        color: #666666;
-        font-size: 13px;
-        font-family: Roboto;
-        padding: 4px;
-    }
-
-    #assets {
-        flex: 1;
-        background-color: #F2F2F2;
-        padding: 20px;
+        color: #1F1F1F;
     }
 
     #footer {
