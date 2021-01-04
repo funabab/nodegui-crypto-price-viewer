@@ -1,18 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Button } from '@nodegui/react-nodegui'
-import PropTypes from 'prop-types'
+import { supportedCurrencies, APIContext } from '../../context/api'
 
-const supportedCurrencies = { USD: '$', EUR: '£', JPY: '¥', NGN: '₦' }
-
-function CurrencyList({ selectedCurrency, onCurrencySelected }) {
-  const selected =
-    selectedCurrency && selectedCurrency.toUpperCase() in supportedCurrencies
-      ? selectedCurrency.toUpperCase()
-      : 'USD'
+function CurrencyList() {
+  const { currency: selected, setCurrency } = useContext(APIContext)
 
   return (
     <View styleSheet={styleSheet} id="currency-list">
-      {Object.keys(supportedCurrencies).map((currency, index) => (
+      {supportedCurrencies.map((currency, index) => (
         <Button
           style={
             currency === selected ? 'color: #00D1D1; font-weight: bold;' : ''
@@ -20,19 +15,14 @@ function CurrencyList({ selectedCurrency, onCurrencySelected }) {
           key={index}
           flat={true}
           on={{
-            clicked: () => onCurrencySelected(currency),
+            clicked: () => setCurrency(currency),
           }}
         >
-          {currency}
+          {currency.toUpperCase()}
         </Button>
       ))}
     </View>
   )
-}
-
-CurrencyList.propTypes = {
-  selectedCurrency: PropTypes.string,
-  onCurrencySelected: PropTypes.func,
 }
 
 const styleSheet = `
@@ -52,9 +42,3 @@ const styleSheet = `
 `
 
 export default CurrencyList
-
-export function getCurrencySymbol(currency) {
-  return currency && currency.toUpperCase() in supportedCurrencies
-    ? supportedCurrencies[currency.toUpperCase()]
-    : '?'
-}

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Text, View, Image, Button } from '@nodegui/react-nodegui'
 import BannerImage from '../../../assets/images/error-banner.png'
 import { colorHover, colorPressed } from '../../utils'
+import { APIContext } from '../../context/api'
 
 function ConnectionErrorView() {
+  const { refreshData } = useContext(APIContext)
   return (
     <View styleSheet={styleSheet} id="connection-error">
       <View id="view-wrapper">
@@ -14,7 +16,13 @@ function ConnectionErrorView() {
         ></Image>
         <Text id="text-title">SERVER IS CURRENTLY UNREACHABLE</Text>
         <Text id="text-detail">MAKE SURE YOU HAVE ACTIVE CONNECTION</Text>
-        <Button id="action-btn" flat={true}>
+        <Button
+          id="action-btn"
+          flat={true}
+          on={{
+            clicked: refreshData,
+          }}
+        >
           Try Again
         </Button>
       </View>

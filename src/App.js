@@ -4,6 +4,7 @@ import { Window } from '@nodegui/react-nodegui'
 import View from './views'
 import { name as appName, displayName } from '../package.json'
 import IconImage from '../assets/images/icon.png'
+import { APIProvider } from './context/api'
 
 const windowSize = { width: 779, height: 624 }
 const icon = new QIcon(IconImage)
@@ -16,7 +17,9 @@ function App() {
       style="background-color: #FAFAFA; text-align: center;"
       windowIcon={icon}
     >
-      <View />
+      <APIProvider>
+        <View />
+      </APIProvider>
     </Window>
   )
 }

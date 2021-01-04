@@ -6,39 +6,47 @@ import PropTypes from 'prop-types'
 import { colorHover, colorPressed } from '../../utils'
 
 function AssetItem({
-  asset: { name, symbol, price, change, market },
-  currencySymbol,
+  asset: { id, name, symbol, price, change, market },
+  onRemove,
 }) {
+  const currencySymbol = price[0]
+  const priceValue = price.substr(1)
+
   return (
     <View id="asset" styleSheet={styleSheet}>
       <View id="asset-left">
-        <MDIconButton icon="delete" id="action-btn" />
-        <CryptoIconLabel icon={symbol.toLowerCase()} id="asset-icon" />
-        <View>
+        <MDIconButton
+          icon="delete"
+          id="action-btn"
+          on={{
+            clicked: () => onRemove(id),
+          }}
+        />
+        <View style="padding-left: 20px; padding-right: 20px">
+          <CryptoIconLabel icon={symbol.toLowerCase()} id="asset-icon" />
+        </View>
+        <View style="display: flex; flex-direction: column">
           <Text id="asset-name-full">{name}</Text>
           <Text id="asset-name-short">{symbol}</Text>
         </View>
       </View>
       <View id="asset-right">
         <View id="asset-price">
-          <Text id="price-change">{change}%</Text>
+          <Text id="price-change" style={change <= 0 ? 'color: #990000;' : ''}>
+            {change}%
+          </Text>
           <Text id="price-currency">{currencySymbol}</Text>
-          <Text id="price-value">{price}</Text>
+          <Text id="price-value">{priceValue}</Text>
         </View>
         <View id="asset-market">
           <View>
             <Text id="market-data">Market Cap:</Text>
-            <Text id="market-value">
-              {currencySymbol}
-              {market.marketCap}
-            </Text>
+            <Text id="market-value">{market.marketCap}</Text>
           </View>
           <View>
             <Text id="market-data">24HR HIGH/LOW:</Text>
             <Text id="market-value">
-              {currencySymbol}
-              {market.marketHigh} / {currencySymbol}
-              {market.marketLow}
+              {market.marketHigh} / {market.marketLow}
             </Text>
           </View>
         </View>
@@ -48,8 +56,19 @@ function AssetItem({
 }
 
 AssetItem.propTypes = {
-  asset: PropTypes.object,
-  currencySymbol: PropTypes.string,
+  asset: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    symbol: PropTypes.string.isRequired,
+    price: PropTypes.string.isRequired,
+    change: PropTypes.number.isRequired,
+    market: PropTypes.shape({
+      marketCap: PropTypes.string.isRequired,
+      marketHigh: PropTypes.string.isRequired,
+      marketLow: PropTypes.string.isRequired,
+    }),
+  }),
+  onRemove: PropTypes.func.isRequired,
 }
 
 const styleSheet = `
@@ -68,8 +87,6 @@ const styleSheet = `
         display: flex;
         flex-direction: row;
         align-items: "center";
-        justify-content: "space-between";
-        width: 320px;
     }
 
     #action-btn QPushButton {
@@ -117,6 +134,11 @@ const styleSheet = `
         margin-left: 2px;
     }
 
+    #asset-right {
+      display: flex;
+      flex-direction: column;
+    }
+
     #asset-price {
         display: flex;
         flex-direction: row;
@@ -138,13 +160,15 @@ const styleSheet = `
     }
 
     #price-change {
-        color: #990000;
+        color: #009900;
         font-size: 18px;
         font-family: Roboto;
     }
 
     #asset-market {
         margin-top: 4px;
+        display: flex;
+        flex-direction: column;
     }
 
     #asset-market > QWidget {

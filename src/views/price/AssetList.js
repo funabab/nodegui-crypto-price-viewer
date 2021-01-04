@@ -1,17 +1,10 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext } from 'react'
 import { View, Text, ScrollArea } from '@nodegui/react-nodegui'
 import AssetItem from './AssetItem'
-import PropTypes from 'prop-types'
+import { APIContext } from '../../context/api'
 
-function AssetList({ assets, currencySymbol }) {
-  const viewRef = useRef(null)
-
-  // FUTURE FIX: currently this solve issue of scroll children widgets getting out of place (not updating) during re-render
-  useEffect(() => {
-    if (viewRef.current != null && viewRef.current.layout) {
-      viewRef.current.layout.update()
-    }
-  })
+function AssetList() {
+  const { assets, removeAsset } = useContext(APIContext)
 
   if (assets.length < 1) {
     return (
@@ -34,27 +27,14 @@ function AssetList({ assets, currencySymbol }) {
   }
 
   return (
-    <View styleSheet={styleSheet} id="assets">
-      {
-        <ScrollArea>
-          <View ref={viewRef}>
-            {assets.map((asset, index) => (
-              <AssetItem
-                key={index}
-                asset={asset}
-                currencySymbol={currencySymbol}
-              />
-            ))}
-          </View>
-        </ScrollArea>
-      }
-    </View>
+    <ScrollArea styleSheet={styleSheet} id="assets">
+      <View>
+        {assets.map((asset, index) => (
+          <AssetItem key={index} asset={asset} onRemove={removeAsset} />
+        ))}
+      </View>
+    </ScrollArea>
   )
-}
-
-AssetList.propTypes = {
-  assets: PropTypes.array,
-  currencySymbol: PropTypes.string,
 }
 
 const styleSheet = `
@@ -62,12 +42,8 @@ const styleSheet = `
         flex: 1;
         background-color: #F2F2F2;
         display: flex;
-        padding: 20px;
-    }
-
-    #assets QScrollArea {
-        flex: 1;
         border: 0px;
+        padding: 20px;
     }
 `
 

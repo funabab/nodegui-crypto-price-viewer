@@ -1,21 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, LineEdit } from '@nodegui/react-nodegui'
+import React, { useEffect, useRef, useContext } from 'react'
+import { View, Text } from '@nodegui/react-nodegui'
 import { colorHover, colorPressed } from '../../utils'
 import MDIconButton from '../../components/MDIconButton'
-import CurrencyList, { getCurrencySymbol } from './CurrencyList'
+import CurrencyList from './CurrencyList'
 import AssetList from './AssetList'
-import StatusText from './StatusText'
+import { APIContext } from '../../context/api'
+import AddAsset from './AddAsset'
+
+const PRICE_REFRESH_DURATION = 1000 * 60
 
 function PriceView() {
+  const { apiState, refreshData } = useContext(APIContext)
   const viewRef = useRef(null)
-  const [priceCurrency, setPriceCurrency] = useState('ngn')
-  const currencySymbol = getCurrencySymbol(priceCurrency)
 
   // FUTURE FIX: currently this solve issue of widgets getting out of place (not updating) during re-render
   useEffect(() => {
     if (viewRef.current !== null) {
       viewRef.current.layout.update()
     }
+
+    const timerID = setInterval(() => refreshData(), PRICE_REFRESH_DURATION)
+    return () => clearInterval(timerID)
   })
 
   return (
@@ -23,39 +28,20 @@ function PriceView() {
       <View id="header">
         <View id="header-left">
           <Text>Currency:</Text>
-
-          <CurrencyList
-            selectedCurrency={priceCurrency}
-            onCurrencySelected={(selectedCurrency) => {
-              setPriceCurrency(selectedCurrency)
-            }}
-          />
+          <CurrencyList />
         </View>
         <View id="header-right">
-          <Text id="connection-status">In Sync</Text>
+          <Text
+            id="connection-status"
+            style={apiState === 'out-of-sync' ? 'color: #CC1912' : ''}
+          >
+            {apiState === 'out-of-sync' ? 'Out of Sync' : 'In Sync'}
+          </Text>
           <MDIconButton icon="brightness-2" flat={true} />
         </View>
       </View>
-      <LineEdit placeholderText="TYPE NEW ASSET TO ADD..."></LineEdit>
-      <StatusText />
-      <AssetList
-        assets={
-          [
-            // {
-            //   name: 'Bitcoin',
-            //   symbol: 'btc',
-            //   price: '20,0000',
-            //   change: '-1.4',
-            //   market: {
-            //     marketCap: '440,353,650573',
-            //     marketHigh: '22,852.83',
-            //     marketLow: '23,739.85',
-            //   },
-            // },
-          ]
-        }
-        currencySymbol={currencySymbol}
-      />
+      <AddAsset />
+      <AssetList />
       <View id="footer">
         <Text>POWERED BY: coingecko.com</Text>
       </View>
@@ -118,17 +104,6 @@ const styleSheet = `
 
     #header-right QPushButton:pressed {
         background-color: ${colorPressed('#E5E5E5')};
-    }
-
-    QLineEdit {
-        background-color: #D4D4D4;
-        border: 0px;
-        border-radius: 0px;
-        font-size: 25px;
-        height: 55px;
-        padding-left: 50px;
-        text-transform: uppercase;
-        color: #1F1F1F;
     }
 
     #footer {
