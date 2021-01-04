@@ -9,6 +9,7 @@ const currenciesSymbol = { usd: '$', eur: '£', jpy: '¥', ngn: '₦' }
 const currencies = Object.keys(currenciesSymbol)
 const IntialState = {
   apiState: 'not-loaded',
+  requestState: 'initial',
   coins: {
     ids: [],
     names: [],
@@ -23,14 +24,19 @@ const IntialState = {
   }, {}),
 }
 
+const inArray = (what, arr) => {
+  const index = arr.indexOf(what)
+  return index > -1 ? index : undefined
+}
+
 export function APIProvider({ appConfig, children }) {
-  const [{ apiState, coins, currency, ids, assetsData }, dispatch] = useReducer(
-    Reducer,
-    {
-      ...IntialState,
-      ids: appConfig.get(CONFIG_ASSET_IDS) || [],
-    }
-  )
+  const [
+    { apiState, requestState, coins, currency, ids, assetsData },
+    dispatch,
+  ] = useReducer(Reducer, {
+    ...IntialState,
+    ids: appConfig.get(CONFIG_ASSET_IDS) || [],
+  })
 
   const currencySymbol = currenciesSymbol[currency]
 
@@ -119,9 +125,10 @@ export function APIProvider({ appConfig, children }) {
   }, [ids])
 
   return (
-    <APIContext.Provider
+    <context.Provider
       value={{
         apiState,
+        requestState,
         assets,
         refreshData,
         currency,
@@ -131,19 +138,18 @@ export function APIProvider({ appConfig, children }) {
           }
         },
         addAsset: async (asset) => {
-          const nameIndex = coins.names.indexOf(asset)
-          const symbolsIndex =
-            nameIndex === -1 ? coins.symbols.indexOf(asset) : -1
-          const idsIndex = symbolsIndex === -1 ? coins.ids.indexOf(asset) : -1
+          const index =
+            inArray(asset, coins.names) ||
+            inArray(asset, coins.symbols) ||
+            inArray(asset, coins.ids) ||
+            undefined
 
-          if (nameIndex !== -1) {
-            dispatch({ type: 'add-asset', payload: coins.ids[nameIndex] })
-          } else if (symbolsIndex !== -1) {
-            dispatch({ type: 'add-asset', payload: coins.ids[symbolsIndex] })
-          } else if (idsIndex !== -1) {
-            dispatch({ type: 'add-asset', payload: coins.ids[idsIndex] })
-          } else {
+          if (typeof index === 'undefined') {
             throw new Error('Asset not found')
+          } else {
+            if (ids.indexOf(coins.ids[index]) === -1) {
+              dispatch({ type: 'add-asset', payload: coins.ids[index] })
+            }
           }
         },
         removeAsset: (asset) => {
@@ -152,7 +158,7 @@ export function APIProvider({ appConfig, children }) {
       }}
     >
       {children}
-    </APIContext.Provider>
+    </context.Provider>
   )
 }
 
@@ -187,18 +193,18 @@ const Reducer = (state, { type, payload }) => {
     case 'no-asset-added':
       return {
         ...state,
-        apiState: 'in-sync',
+        requestState: 'in-sync',
       }
     case 'set-assets-data':
       return {
         ...state,
         assetsData: payload,
-        apiState: 'in-sync',
+        requestState: 'in-sync',
       }
     case 'set-assets-data-error':
       return {
         ...state,
-        apiState: 'out-of-sync',
+        requestState: 'out-of-sync',
       }
     case 'set-currency':
       return {
@@ -206,12 +212,6 @@ const Reducer = (state, { type, payload }) => {
         currency: payload,
       }
     case 'add-asset':
-      if (state.ids.indexOf(payload) !== -1) {
-        return {
-          ...state,
-        }
-      }
-
       return {
         ...state,
         ids: [...state.ids, payload],

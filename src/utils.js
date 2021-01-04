@@ -1,5 +1,4 @@
 import Color from 'color'
-import color from 'color'
 
 export function colorHover(color) {
   const c = Color(color)

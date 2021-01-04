@@ -4,6 +4,7 @@ import MDIconButton from '../../components/MDIconButton'
 import CryptoIconLabel from '../../components/CryptoIconLabel'
 import PropTypes from 'prop-types'
 import { colorHover, colorPressed } from '../../utils'
+import { useTheme } from '../../hooks/useTheme'
 
 function AssetItem({
   asset: { id, name, symbol, price, change, market },
@@ -11,6 +12,8 @@ function AssetItem({
 }) {
   const currencySymbol = price[0]
   const priceValue = price.substr(1)
+
+  const styleSheet = useTheme(themeStyleSheet)
 
   return (
     <View id="asset" styleSheet={styleSheet}>
@@ -71,7 +74,7 @@ AssetItem.propTypes = {
   onRemove: PropTypes.func.isRequired,
 }
 
-const styleSheet = `
+const themeStyleSheet = (isLightTheme) => `
     #asset {
         display: flex;
         flex-direction: row;
@@ -80,7 +83,7 @@ const styleSheet = `
         padding: 20px;
         padding-bottom: 30px;
         padding-top: 30px;
-        border-bottom: 2px solid #DEDEDE;
+        border-bottom: 2px solid ${isLightTheme ? '#DEDEDE' : '#666666'};
     }
 
     #asset-left {
@@ -90,22 +93,26 @@ const styleSheet = `
     }
 
     #action-btn QPushButton {
-        border: 2px solid #666666;
+        border: 2px solid ${isLightTheme ? '#666666' : '#CCCCCC'};
         border-radius: 20px;
         width: 40px;
         height: 40px;
         font-size: 28px;
-        color: #F2F2F2;
+        color: ${isLightTheme ? '#F2F2F2' : '#3D3D3D'};
     }
 
     #action-btn QPushButton:hover {
-        background-color: ${colorHover('#F2F2F2')};
-        color: #666666;
+        background-color: ${
+          isLightTheme ? colorHover('#F2F2F2') : colorHover('#3D3D3D')
+        };
+        color: ${isLightTheme ? '#666666' : '#CCCCCC'};
     }
 
     #action-btn QPushButton:pressed {
-        background-color: ${colorPressed('#F2F2F2')};
-        color: #666666;
+        background-color: ${
+          isLightTheme ? colorPressed('#F2F2F2') : colorPressed('#3D3D3D')
+        };
+        color: ${isLightTheme ? '#666666' : '#CCCCCC'};
     }
 
     #asset-icon QLabel {
@@ -123,7 +130,7 @@ const styleSheet = `
         font-weight: 500;
         font-family: Roboto;
         text-transform: uppercase;
-        color: #000000;
+        color: ${isLightTheme ? '#000000' : '#CCCCCC'};
     }
 
     #asset-name-short {
@@ -146,15 +153,15 @@ const styleSheet = `
     }
 
     #price-value {
-        color: #000000;
+        color: ${isLightTheme ? '#000000' : '#CCCCCC'};
         font-family: Roboto;
         font-weight: 500;
         font-size: 44px;
     }
 
     #price-currency {
-        color: #000000;
-        font-size: 30px;
+      color: ${isLightTheme ? '#000000' : '#CCCCCC'};
+      font-size: 30px;
         margin-left: 1px;
         margin-right: 1px;
     }
@@ -188,7 +195,7 @@ const styleSheet = `
     }
 
     #market-value {
-        color: #1F1F1F;
+        color: ${isLightTheme ? '#1F1F1F' : '#CCCCCC'};
     }
 `
 

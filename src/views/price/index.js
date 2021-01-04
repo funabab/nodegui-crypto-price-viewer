@@ -4,13 +4,17 @@ import { colorHover, colorPressed } from '../../utils'
 import MDIconButton from '../../components/MDIconButton'
 import CurrencyList from './CurrencyList'
 import AssetList from './AssetList'
-import { APIContext } from '../../context/api'
+import { APIContext } from '../../contexts/api'
 import AddAsset from './AddAsset'
+import { ThemeContext } from '../../contexts/theme'
+import { useTheme } from '../../hooks/useTheme'
 
 const PRICE_REFRESH_DURATION = 1000 * 60
 
 function PriceView() {
-  const { apiState, refreshData } = useContext(APIContext)
+  const { requestState, refreshData } = useContext(APIContext)
+  const { isLight: isLightTheme, setThemeMode } = useContext(ThemeContext)
+  const styleSheet = useTheme(themeStyleSheet)
   const viewRef = useRef(null)
 
   // FUTURE FIX: currently this solve issue of widgets getting out of place (not updating) during re-render
@@ -33,11 +37,17 @@ function PriceView() {
         <View id="header-right">
           <Text
             id="connection-status"
-            style={apiState === 'out-of-sync' ? 'color: #CC1912' : ''}
+            style={requestState === 'out-of-sync' ? 'color: #FF6666;' : ''}
           >
-            {apiState === 'out-of-sync' ? 'Out of Sync' : 'In Sync'}
+            {requestState === 'out-of-sync' ? 'Out of Sync' : 'In Sync'}
           </Text>
-          <MDIconButton icon="brightness-2" flat={true} />
+          <MDIconButton
+            icon={isLightTheme ? 'brightness-2' : 'brightness-7'}
+            on={{
+              clicked: () => setThemeMode(!isLightTheme),
+            }}
+            flat={true}
+          />
         </View>
       </View>
       <AddAsset />
@@ -49,14 +59,15 @@ function PriceView() {
   )
 }
 
-const styleSheet = `
+const themeStyleSheet = (isLightTheme) => `
     #price-view {
         display: flex;
         flex-direction: column;
+        background-color: ${isLightTheme ? '#FAFAFA' : '#666666'};
     }
 
     #header {
-        background-color: #FFFFFF;
+        background-color: ${isLightTheme ? '#FFFFFF' : '#666666'};
         display: flex;
         flex-direction: row;
         align-items: "center";
@@ -75,11 +86,11 @@ const styleSheet = `
         text-transform: uppercase;
         margin-left: 15px;
         margin-right: 7px;
-        color: #666666;
+        color: ${isLightTheme ? '#666666' : '#FAFAFA'};
     }
 
     #connection-status {
-        color: #1A661D;
+        color: #66FF99;
         font-family: Roboto;
         font-size: 10px;
         font-style: italic;   
@@ -91,28 +102,35 @@ const styleSheet = `
     #header-right QPushButton {
         width: 42px;
         height: 42px;
-        background-color: #E5E5E5;
+        background-color: ${isLightTheme ? '#E5E5E5' : '#8A8A8A'};
         font-size: 18px;
-        color: #000000;
+        color: ${isLightTheme ? '#000000' : '#FFFFFF'};
         border: 0px;
         border-radius: 0px;
     }
 
     #header-right QPushButton:hover {
-        background-color: ${colorHover('#E5E5E5')};
+        background-color: ${
+          isLightTheme ? colorHover('#E5E5E5') : colorHover('#8A8A8A')
+        };
     }
 
     #header-right QPushButton:pressed {
-        background-color: ${colorPressed('#E5E5E5')};
+        background-color: ${
+          isLightTheme ? colorPressed('#E5E5E5') : colorPressed('#8A8A8A')
+        };
     }
 
     #footer {
         font-size: 10px;
         font-family: Roboto;
-        color: #363636;
-        background-color: #E8E8E8;
+        background-color: ${isLightTheme ? '#E8E8E8' : '#303030'};
         padding: 10px;
         padding-left: 20px;
+    }
+
+    #footer QLabel {
+      color: ${isLightTheme ? '#363636' : '#DEDEDE'};
     }
 
     

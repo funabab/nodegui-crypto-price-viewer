@@ -1,10 +1,12 @@
 import React, { useContext, useReducer } from 'react'
 import { LineEdit } from '@nodegui/react-nodegui'
 import StatusText from './StatusText'
-import { APIContext } from '../../context/api'
+import { APIContext } from '../../contexts/api'
+import { useTheme } from '../../hooks/useTheme'
 
 function AddAsset() {
   const { addAsset } = useContext(APIContext)
+  const style = useTheme(themeStyle)
   const [{ viewState, ...params }, dispatch] = useReducer(Reducer, {
     viewState: 'initial',
     input: '',
@@ -37,16 +39,7 @@ function AddAsset() {
     <>
       <LineEdit
         placeholderText="TYPE NEW ASSET TO ADD..."
-        style={`
-            background-color: #D4D4D4;
-            border: 0px;
-            border-radius: 0px;
-            font-size: 25px;
-            height: 55px;
-            padding-left: 50px;
-            text-transform: uppercase;
-            color: #1F1F1F;
-      `}
+        style={style}
         enabled={viewState !== 'busy'}
         text={params.input}
         on={{
@@ -91,5 +84,16 @@ const Reducer = (state, { type, payload }) => {
       throw new Error()
   }
 }
+
+const themeStyle = (isLightTheme) => `
+  background-color: ${isLightTheme ? '#D4D4D4' : '#424242'};
+  border: 0px;
+  border-radius: 0px;
+  font-size: 25px;
+  height: 55px;
+  padding-left: 50px;
+  text-transform: uppercase;
+  color: ${isLightTheme ? '#1F1F1F' : '#919191'};
+`
 
 export default AddAsset

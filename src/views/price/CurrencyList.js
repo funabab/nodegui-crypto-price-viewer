@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { View, Button } from '@nodegui/react-nodegui'
-import { supportedCurrencies, APIContext } from '../../context/api'
+import { supportedCurrencies, APIContext } from '../../contexts/api'
 
 function CurrencyList() {
   const { currency: selected, setCurrency } = useContext(APIContext)

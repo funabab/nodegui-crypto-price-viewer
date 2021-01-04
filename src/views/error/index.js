@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Text, View, Image, Button } from '@nodegui/react-nodegui'
 import BannerImage from '../../../assets/images/error-banner.png'
 import { colorHover, colorPressed } from '../../utils'
-import { APIContext } from '../../context/api'
+import { APIContext } from '../../contexts/api'
 
 function ConnectionErrorView() {
   const { refreshData } = useContext(APIContext)
