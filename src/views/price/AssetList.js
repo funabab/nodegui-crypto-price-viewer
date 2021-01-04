@@ -28,7 +28,7 @@ function AssetList() {
 
   return (
     <ScrollArea styleSheet={styleSheet} id="assets">
-      <View>
+      <View style="display: flex; flex-direction: column">
         {assets.map((asset, index) => (
           <AssetItem key={index} asset={asset} onRemove={removeAsset} />
         ))}

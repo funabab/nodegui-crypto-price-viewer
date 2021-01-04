@@ -8,7 +8,7 @@ import IconImage from '../../assets/images/icon.png'
 function View() {
   const { apiState } = useContext(APIContext)
 
-  if (apiState === 'not-loaded') {
+  if (apiState === 'not-loaded' || apiState === 'loaded') {
     return (
       <ViewWidget styleSheet={loadingStyleSheet} id="loading-view">
         <Image src={IconImage} size={{ width: 150, height: 150 }} />

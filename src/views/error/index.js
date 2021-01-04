@@ -15,7 +15,7 @@ function ConnectionErrorView() {
           src={BannerImage}
         ></Image>
         <Text id="text-title">SERVER IS CURRENTLY UNREACHABLE</Text>
-        <Text id="text-detail">MAKE SURE YOU HAVE ACTIVE CONNECTION</Text>
+        <Text id="text-detail">MAKE SURE YOU HAVE AN ACTIVE CONNECTION</Text>
         <Button
           id="action-btn"
           flat={true}

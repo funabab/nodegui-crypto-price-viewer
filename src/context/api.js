@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useReducer } from 'react'
 import axios from 'axios'
 
 const API_BASE_URL = 'https://api.coingecko.com/api/v3'
+const CONFIG_ASSET_IDS = 'asset_ids'
 
 const context = createContext(null)
 const currenciesSymbol = { usd: '$', eur: '£', jpy: '¥', ngn: '₦' }
@@ -25,7 +26,10 @@ const IntialState = {
 export function APIProvider({ appConfig, children }) {
   const [{ apiState, coins, currency, ids, assetsData }, dispatch] = useReducer(
     Reducer,
-    IntialState
+    {
+      ...IntialState,
+      ids: appConfig.get(CONFIG_ASSET_IDS) || [],
+    }
   )
 
   const currencySymbol = currenciesSymbol[currency]
@@ -82,6 +86,7 @@ export function APIProvider({ appConfig, children }) {
     }
 
     if (ids.length < 1) {
+      dispatch({ type: 'no-asset-added' })
       return
     }
 
@@ -110,6 +115,7 @@ export function APIProvider({ appConfig, children }) {
 
   useEffect(() => {
     refreshData()
+    appConfig.set(CONFIG_ASSET_IDS, ids)
   }, [ids])
 
   return (
@@ -177,6 +183,11 @@ const Reducer = (state, { type, payload }) => {
       return {
         ...state,
         apiState: 'error',
+      }
+    case 'no-asset-added':
+      return {
+        ...state,
+        apiState: 'in-sync',
       }
     case 'set-assets-data':
       return {

@@ -5,9 +5,11 @@ import View from './views'
 import { name as appName, displayName } from '../package.json'
 import IconImage from '../assets/images/icon.png'
 import { APIProvider } from './context/api'
+import ConfigStore from 'configstore'
 
 const windowSize = { width: 779, height: 624 }
 const icon = new QIcon(IconImage)
+const appConfig = new ConfigStore(appName)
 
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
       style="background-color: #FAFAFA; text-align: center;"
       windowIcon={icon}
     >
-      <APIProvider>
+      <APIProvider appConfig={appConfig}>
         <View />
       </APIProvider>
     </Window>
