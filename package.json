@@ -13,7 +13,7 @@
     "build": "webpack --mode production",
     "dev": "nodemon -e js,json,ttf,png --watch assets --watch src --exec \"npm run start\"",
     "package": "npm run build && npm run package:init && npm run package:pack",
-    "package:init": "rm -rf ./deploy && nodegui-packer --init $npm_package_app_name",
+    "package:init": "shx rm -rf ./deploy && nodegui-packer --init $npm_package_app_name",
     "package:pack": "nodegui-packer --pack ./dist"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "file-loader": "^6.2.0",
     "native-addon-loader": "^2.0.1",
     "nodemon": "^2.0.4",
+    "shx": "^0.3.3",
     "webpack": "^5.11.0",
     "webpack-cli": "^4.2.0"
   }

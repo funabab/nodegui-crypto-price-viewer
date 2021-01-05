@@ -144,9 +144,9 @@ export function APIProvider({ appConfig, children }) {
         },
         addAsset: async (asset) => {
           const index =
-            inArray(asset, coins.names) ||
-            inArray(asset, coins.symbols) ||
-            inArray(asset, coins.ids) ||
+            inArray(asset, coins.names) ??
+            inArray(asset, coins.symbols) ??
+            inArray(asset, coins.ids) ??
             undefined
 
           if (typeof index === 'undefined') {
