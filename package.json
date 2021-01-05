@@ -2,7 +2,6 @@
   "name": "nodegui-crypto-price-viewer",
   "displayName": "NodeGUI Crypto Price Viewer",
   "version": "1.0.0",
-  "main": "index.js",
   "author": "Abdulbassit Abdullahi Funsho",
   "license": "MIT",
   "app": {
@@ -13,8 +12,9 @@
     "build": "webpack --mode production",
     "dev": "nodemon -e js,json,ttf,png --watch assets --watch src --exec \"npm run start\"",
     "package": "npm run build && npm run package:init && npm run package:pack",
-    "package:init": "shx rm -rf ./deploy && nodegui-packer --init $npm_package_app_name",
-    "package:pack": "nodegui-packer --pack ./dist"
+    "package:init": "shx rm -rf ./deploy ./build/ && shx mkdir ./build && nodegui-packer --init $npm_package_app_name",
+    "package:pack": "nodegui-packer --pack ./dist",
+    "package:copy-linux": "shx cp ./deploy/linux/build/$npm_package_app_name/Application-x86_64.AppImage ./build/linux-x86_64.AppImage"
   },
   "dependencies": {
     "@nodegui/react-nodegui": "^0.10.0",
