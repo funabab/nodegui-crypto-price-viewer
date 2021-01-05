@@ -2,7 +2,7 @@ import React from 'react'
 import { QIcon } from '@nodegui/nodegui'
 import { Window } from '@nodegui/react-nodegui'
 import View from './views'
-import { name as appName, displayName } from '../package.json'
+import packageJson from '../package.json'
 import IconImage from '../assets/images/icon.png'
 import { APIProvider } from './contexts/api'
 import ConfigStore from 'configstore'
@@ -10,13 +10,13 @@ import { ThemeProvider } from './contexts/theme'
 
 const windowSize = { width: 779, height: 624 }
 const icon = new QIcon(IconImage)
-const appConfig = new ConfigStore(appName)
+const appConfig = new ConfigStore(packageJson.name)
 
 function App() {
   return (
     <Window
       minSize={windowSize}
-      windowTitle={displayName}
+      windowTitle={packageJson.displayName}
       style="background-color: #FAFAFA; text-align: center;"
       windowIcon={icon}
     >
@@ -30,4 +30,3 @@ function App() {
 }
 
 export default App
-export const APP_NAME = appName

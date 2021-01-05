@@ -3,6 +3,7 @@ import axios from 'axios'
 
 const API_BASE_URL = 'https://api.coingecko.com/api/v3'
 const CONFIG_ASSET_IDS = 'asset_ids'
+const CONFIG_CURRENCY = 'user_currrency'
 
 const context = createContext(null)
 const currenciesSymbol = { usd: '$', eur: '£', jpy: '¥', ngn: '₦' }
@@ -36,6 +37,7 @@ export function APIProvider({ appConfig, children }) {
   ] = useReducer(Reducer, {
     ...IntialState,
     ids: appConfig.get(CONFIG_ASSET_IDS) || [],
+    currency: appConfig.get(CONFIG_CURRENCY) || 'usd',
   })
 
   const currencySymbol = currenciesSymbol[currency]
@@ -121,8 +123,11 @@ export function APIProvider({ appConfig, children }) {
 
   useEffect(() => {
     refreshData()
-    appConfig.set(CONFIG_ASSET_IDS, ids)
   }, [ids])
+
+  useEffect(() => {
+    appConfig.set({ [CONFIG_ASSET_IDS]: ids, [CONFIG_CURRENCY]: currency })
+  }, [ids, currency])
 
   return (
     <context.Provider
